@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from llm import LLM
 import os
@@ -20,8 +20,9 @@ def pptx():
         ppt_code = llm.create_ppt_code_prompt(prompt)
         exec(ppt_code)
 
-        return
+        return send_file('./res.pptx', attachment_filename='res.pptx')
 
     except Exception as e:
         return {"error": f"Failed to create events: {str(e)}"}
-    
+
+app.run(debug=True)
