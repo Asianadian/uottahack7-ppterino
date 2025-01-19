@@ -4,20 +4,7 @@ export default function PepperoniPrompt() {
   const [prompt, setPrompt] = useState("Hello");
   const [image, setImage] = useState(null);
 
-  const [script, setScript] = useState(`
-    Sprite: A Global Icon of Refreshment
-    Sprite is a clear, lemon-lime-flavored soft drink that has become a household name worldwide. Known for its crisp, refreshing taste, Sprite is a caffeine-free alternative to cola beverages and has captured the hearts of millions. First introduced by The Coca-Cola Company in 1961, Sprite was designed to compete with the already popular 7-Up. The drink’s name is rooted in Coca-Cola’s advertising history, inspired by the “Sprite Boy” character used in campaigns during the 1940s and 50s. Today, Sprite is one of the most recognized and widely consumed soft drinks globally.
-
-    The history of Sprite is a story of growth and innovation. Launched in the United States in 1961, Sprite quickly became a favorite among consumers for its unique lemon-lime flavor. By the 1970s, it had secured its position as the leading lemon-lime soda in the U.S. and began to expand internationally. In the 1980s, Sprite gained global recognition, spreading to markets across Europe, Asia, and Africa. Its bold marketing strategies in the 2000s, which focused on youth culture and urban influence, solidified its place as a modern and dynamic brand. Today, Sprite is sold in over 190 countries, making it one of Coca-Cola’s most successful beverages.
-
-    Over the years, Sprite has introduced a wide range of flavors to cater to diverse consumer preferences. While the original lemon-lime flavor remains the most popular, the brand has experimented with innovative variations. Sprite Zero Sugar offers a sugar-free option for health-conscious consumers, while Sprite Cranberry has become a seasonal favorite, particularly during the holidays. Other unique flavors include Sprite Tropical Mix, which combines tropical fruit notes, and regional specialties like Sprite Cucumber in Eastern Europe and Russia or Sprite Ice in parts of Asia. Limited-edition offerings such as Sprite Lymonade (a blend of lemon-lime and lemonade) further highlight the brand’s commitment to innovation and catering to local tastes.
-
-    Sprite’s success is not just about its flavor but also its groundbreaking marketing strategies. The brand’s campaigns have consistently targeted younger audiences, emphasizing individuality, creativity, and authenticity. Taglines like “Obey Your Thirst” in 1994 encouraged self-expression, while the 2019 campaign “Thirst for Yours” celebrated the power of creativity. Sprite’s association with hip-hop culture has been particularly notable, with collaborations featuring major artists and sponsorships of events that resonate with its core audience. Additionally, partnerships with celebrities like basketball legends Kobe Bryant and LeBron James have further cemented its cultural relevance. Region-specific marketing, including festive packaging and local influencers, ensures Sprite’s connection with audiences across the globe.
-
-    Beyond its history and marketing, Sprite has some fascinating characteristics that have made it a staple in households worldwide. Unlike many other soft drinks, Sprite is caffeine-free, making it an ideal choice for those seeking a refreshing beverage without the stimulant effects. Its fizzy and tangy flavor complements spicy foods, making it especially popular in regions like Asia and Latin America. Sprite is also a favorite mixer in cocktails and mocktails, owing to its versatility. Furthermore, in recent years, Sprite has taken steps toward sustainability by introducing bottles made from 100% recycled plastic in certain markets, showcasing the brand’s commitment to environmental responsibility.
-
-    In conclusion, Sprite has grown from a simple lemon-lime soda into a global icon of refreshment and cultural significance. Its innovative flavors, bold marketing campaigns, and adaptability to diverse markets have ensured its relevance over the decades. As one of Coca-Cola’s flagship products, Sprite continues to dominate the lemon-lime soda market and remains a beloved beverage for people around the world.
-  `);
+  const [script, setScript] = useState("");
 
   const handleImageUpload = (e) => {
     if (e.target.files?.[0]) {
@@ -27,6 +14,10 @@ export default function PepperoniPrompt() {
 
   const handlePromptChange = (e) => {
     setPrompt(e.target.value);
+  };
+
+  const handleScriptChange = (e) => {
+    setScript(e.target.value);
   };
 
   const handleSubmit = async(e) => {
@@ -119,6 +110,23 @@ export default function PepperoniPrompt() {
               onChange={handlePromptChange}
               placeholder="Enter your prompt here"
               className="w-full border border-gray-300 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-pink-300"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="scriptInput"
+              className="block font-medium mb-1 text-gray-700"
+            >
+              Script:
+            </label>
+            <textarea
+              id="scriptInput"
+              value={script}
+              onChange={handleScriptChange}
+              placeholder="Enter your script here"
+              rows={5}
+              className="w-full border border-gray-300 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-pink-300 resize-none"
             />
           </div>
 
