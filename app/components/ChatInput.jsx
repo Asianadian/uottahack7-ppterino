@@ -14,10 +14,35 @@ export default function PepperoniPrompt() {
     setPrompt(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // In a real app, you'd send this data to your backend
-    alert("Submitted! (Connect this to your backend API for real.)");
+    try {
+      const response = await fetch("http://localhost:5000/api/pptx", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: prompt }),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob()
+        // Create a URL for the Blob
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a'); // Create an <a> element
+        a.href = url;
+        a.download = 'res.pptx'; // Set the filename for the downloaded file
+        document.body.appendChild(a);
+        a.click(); // Trigger the download
+        a.remove(); // Remove the element after triggering the download
+        window.URL.revokeObjectURL(url); // Clean up the object URL
+      } else {
+        console.log("No response")
+      }
+    } 
+    catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -75,7 +100,7 @@ export default function PepperoniPrompt() {
               value={prompt}
               onChange={handlePromptChange}
               placeholder="Enter your prompt here"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-pink-300"
+              className="w-full border border-gray-300 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-pink-300"
             />
           </div>
 
