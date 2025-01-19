@@ -16,7 +16,7 @@ export default function HomePage() {
 
       {/* Right Section: 3D Canvas */}
       <div className="w-1/2 relative">
-        <Canvas shadows camera={{ position: [-5, 8, 5], fov: 10 }}>
+        <Canvas shadows camera={{ position: [0, 8, 5], fov: 10 }}>
           <color attach="background" args={["#ffffff"]} />
           <Experience />
         </Canvas>
