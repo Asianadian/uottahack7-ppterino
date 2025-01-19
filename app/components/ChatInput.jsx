@@ -14,34 +14,69 @@ export default function PepperoniPrompt() {
     setPrompt(e.target.value);
   };
 
+  const handleKeyDown = async(e) => {
+    e.preventDefault();
+    if (e.key === "Enter" && prompt.trim() !== "") {
+      try {
+        const response = await fetch("http://localhost:5000/api/pptx", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: prompt }),
+        });
+
+        if (response.ok) {
+          const blob = await response.blob()
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a'); // Create an <a> element
+          a.href = url;
+          a.download = 'res.pptx'; // Set the filename for the downloaded file
+          document.body.appendChild(a);
+          a.click(); // Trigger the download
+          a.remove(); // Remove the element after triggering the download
+          window.URL.revokeObjectURL(url); // Clean up the object URL
+        } else {
+          console.log("No response")
+        }
+      } 
+      catch (error) {
+        console.log(error)
+      }
+    }
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:5000/api/pptx", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt: prompt }),
-      });
+    if (prompt.trim() !== "") {
+      try {
+        const response = await fetch("http://localhost:5000/api/pptx", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: prompt }),
+        });
 
-      if (response.ok) {
-        const blob = await response.blob()
-        // Create a URL for the Blob
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a'); // Create an <a> element
-        a.href = url;
-        a.download = 'res.pptx'; // Set the filename for the downloaded file
-        document.body.appendChild(a);
-        a.click(); // Trigger the download
-        a.remove(); // Remove the element after triggering the download
-        window.URL.revokeObjectURL(url); // Clean up the object URL
-      } else {
-        console.log("No response")
+        if (response.ok) {
+          const blob = await response.blob()
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a'); // Create an <a> element
+          a.href = url;
+          a.download = 'res.pptx'; // Set the filename for the downloaded file
+          document.body.appendChild(a);
+          a.click(); // Trigger the download
+          a.remove(); // Remove the element after triggering the download
+          window.URL.revokeObjectURL(url); // Clean up the object URL
+        } else {
+          console.log("No response")
+        }
+      } 
+      catch (error) {
+        console.log(error)
       }
-    } 
-    catch (error) {
-      console.log(error)
     }
   };
 
@@ -52,11 +87,11 @@ export default function PepperoniPrompt() {
         className="absolute top-20 left-1/2 w-24 h-24"
         style={{ animation: "float 3s ease-in-out infinite" }}
       >
-        <img
+        {/*<img
           src="../pizza.png"
           alt="Floating Pizza"
           className="w-full h-full object-cover"
-        />
+        />*/}
       </div>
 
       {/* Form Card */}
@@ -65,7 +100,7 @@ export default function PepperoniPrompt() {
           Input your pepperoni and we'll make a ppteroni together
         </h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
           <div className="mb-4">
             <label
               htmlFor="imageUpload"
