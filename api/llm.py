@@ -3,6 +3,7 @@ import re
 import dotenv
 import os
 import groq
+import base64
 
 dotenv.load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -50,6 +51,58 @@ class LLM:
         model="llama3-8b-8192",
     )
     return chat_completion.choices[0].message.content
+  
+  def transcribe(self, filename):
+    # Open the audio file
+    with open(filename, "rb") as file:
+        # Create a transcription of the audio file
+        transcription = groq_client.audio.transcriptions.create(
+          file=(filename, file.read()), # Required audio file
+          model="whisper-large-v3-turbo", # Required model to use for transcription
+          prompt="Specify context or spelling",  # Optional
+          response_format="json",  # Optional
+          language="en",  # Optional
+          temperature=0.0  # Optional
+        )
+        return transcription.text
+    
+  def describe_image(self, url):
+    def encode_image(image_path):
+      with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+      
+    try:
+      base64_image = encode_image(url)
+
+      completion = groq_client.chat.completions.create(
+        model="llama-3.2-11b-vision-preview",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "What's in this image?"
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{base64_image}",
+                        }
+                    }
+                ]
+            }
+        ],
+        temperature=1,
+        max_completion_tokens=1024,
+        top_p=1,
+        stream=False,
+        stop=None,
+      )
+    except Exception as e:
+      print(e)
+
+    return completion.choices[0].message.content
   
   def create_ppt_bg(self, prompt):
     response = openai.images.generate(

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
 export default function PepperoniPrompt() {
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [transcription, setTranscription] = useState(null);
 
   const [script, setScript] = useState("");
 
@@ -24,25 +26,29 @@ export default function PepperoniPrompt() {
     setScript(e.target.value);
   };
 
+  const handleRecordingComplete = async (blob) => {
+    const url = URL.createObjectURL(blob);
+    console.log(url)
+    setTranscription(blob);
+    console.log(blob)
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("image", image);
-    
+    formData.append("image", image, 'image.png');
+    if (transcription != null) {
+      formData.append('file', transcription, 'transcription.m4a');
+    };
+    formData.append('prompt', prompt)
+    formData.append('script', script)
+    formData.append('imgUrl', imageUrl)
 
     try {
       const response = await fetch("http://localhost:5000/api/pptx", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ 
-          prompt: prompt,
-          script: script,
-          image: formData,
-          imageUrl: imageUrl
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -130,6 +136,22 @@ export default function PepperoniPrompt() {
               onChange={handlePromptChange}
               placeholder="Enter your prompt here"
               className="w-full border border-gray-300 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-pink-300"
+              style={{marginBottom:10}}
+            />
+            
+            <AudioRecorder
+              onRecordingComplete={handleRecordingComplete}
+              audioTrackConstraints={{
+                noiseSuppression: true,
+                echoCancellation: true
+              }}
+              onNotAllowedOrFound={(err) => console.table(err)}
+              downloadOnSavePress={false}
+              downloadFileExtension="m4a"
+              mediaRecorderOptions={{
+                audioBitsPerSecond: 128000,
+              }}
+              // showVisualizer={true}
             />
           </div>
 
