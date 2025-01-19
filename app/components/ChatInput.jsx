@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function PepperoniPrompt() {
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState("Hello");
   const [image, setImage] = useState(null);
 
   const [script, setScript] = useState(`
@@ -108,11 +108,11 @@ export default function PepperoniPrompt() {
         className="absolute top-20 left-1/2 w-24 h-24"
         style={{ animation: "float 3s ease-in-out infinite" }}
       >
-        <img
+        {/* <img
           src="../pizza.png"
           alt="Floating Pizza"
           className="w-full h-full object-cover"
-        />
+        /> */}
       </div>
 
       {/* Form Card */}
