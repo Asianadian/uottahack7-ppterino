@@ -5,9 +5,6 @@ import PepperoniPrompt from "./components/ChatInput";
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { Cursor } from "./components/Cursor";
-// import { Leva } from "leva";
-
-//import { Html } from "@react-three/drei";
 
 export default function HomePage() {
   return (
