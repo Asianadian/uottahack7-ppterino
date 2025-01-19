@@ -17,11 +17,15 @@ def pptx():
         data = request.get_json()
         prompt = data['prompt']
 
-        ppt_code = llm.create_ppt_code_prompt(prompt)
-        exec(ppt_code)
-
-        return send_file('./res.pptx', attachment_filename='res.pptx')
-
+        while True:
+            try:
+                ppt_code = llm.create_ppt_code_prompt(prompt)
+                exec(ppt_code)
+                res = send_file('./res.pptx')
+                return res
+            except:
+                continue
+        
     except Exception as e:
         return {"error": f"Failed to create events: {str(e)}"}
 
