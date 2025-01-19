@@ -179,7 +179,6 @@ def pptx():
         print(ppt)
         for slide in ppt.slides:
             print('generating')
-            number = random.choice([0, 1, 2])
             image_url = llm.create_ppt_bg(prompt)
             print(image_url)
             resp = requests.get(image_url)

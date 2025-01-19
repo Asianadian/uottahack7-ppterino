@@ -105,15 +105,18 @@ class LLM:
     return completion.choices[0].message.content
   
   def create_ppt_bg(self, prompt):
-    response = openai.images.generate(
-        model="dall-e-2",
-        prompt=f"generate an image, {prompt}, minimalistic with no detail and depth",
-        size="256x256",
-        quality="standard",
-        n=1,
-    )
+    try:
+      response = openai.images.generate(
+          model="dall-e-2",
+          prompt=f"generate an image, {prompt}, minimalistic with no detail and depth",
+          size="1024x1024",
+          quality="standard",
+          n=1,
+      )
 
-    return response.data[0].url
+      return response.data[0].url
+    except Exception as e:
+      print(e)
 
   def generate_variations(self, image_url):
     response = openai.images.create_variation(
