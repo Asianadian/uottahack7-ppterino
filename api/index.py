@@ -74,13 +74,38 @@ def pptx():
 
     try:
         # getting request data from frontend
-        data = request.get_json()
+        data = request.form
         print(data)
-        prompt = data['prompt']
-        script = data['script']
-        imageUrl = data['imageUrl']
+        prompt = data.get('prompt')
+        script = data.get('script')
+        imageUrl = data.get('imageUrl')
+
+        files = request.files
+        transcription = files.get('file')
+        try:
+            save_path = os.path.join("uploads", transcription.filename)
+            os.makedirs("uploads", exist_ok=True)  # Create 'uploads' directory if it doesn't exist
+            transcription.save(save_path)
+        except:
+            ...
+        print('transcribing')
+        transcription = llm.transcribe(save_path)
+
+        image = files.get('image')
+        try:
+            save_path = os.path.join("uploads", image.filename)
+            os.makedirs("uploads", exist_ok=True)  # Create 'uploads' directory if it doesn't exist
+            image.save(save_path)
+        except:
+            ...
+        print('describing')
+        image_desc = llm.describe_image(save_path)
+
+        prompt += ' ' + transcription + ' ' + image_desc
 
         ppt = None
+
+        print('done')
 
         # generating summarized points and storing in parsed_slide_text
         parsed_slide_text = []
@@ -151,10 +176,15 @@ def pptx():
             # image_stream = BytesIO(resp.content)
             # possible_backgrounds.append(image_stream)
             pass
-
+        print(ppt)
         for slide in ppt.slides:
-            number = random.choice([0, 1, 2])
-            pic = slide.shapes.add_picture(possible_backgrounds[number], 0, 0, width=slide_width, height=slide_height)
+            print('generating')
+            image_url = llm.create_ppt_bg(prompt)
+            print(image_url)
+            resp = requests.get(image_url)
+            image_stream = BytesIO(resp.content)
+            print('appending')
+            pic = slide.shapes.add_picture(image_stream, 0, 0, width=slide_width, height=slide_height)
             slide.shapes._spTree.remove(pic._element)
             slide.shapes._spTree.insert(2, pic._element)
 
