@@ -75,8 +75,10 @@ def pptx():
     try:
         # getting request data from frontend
         data = request.get_json()
+        print(data)
         prompt = data['prompt']
         script = data['script']
+        imageUrl = data['imageUrl']
 
         ppt = None
 
@@ -130,20 +132,25 @@ def pptx():
         # INTRODUCE LOGIC HERE, IF WE PROVIDE AN IMAGE WE FEED THAT AND GENERATE VARIATIONS
         # IF NO IMAGE, WE RUN THE GENERATION FIRST
 
-        # if image, add to possible backgrounds
-
-        # generate background
-        # image_url = llm.create_ppt_bg(prompt)
-        # possible_backgrounds.append(image_url)
+        if imageUrl != "":
+            # variation_url = llm.generate_variations(imageUrl)
+            # resp = requests.get(variation_url)
+            # image_stream = BytesIO(resp.content)
+            # possible_backgrounds.append(image_stream)
+            pass
+        else:
+            # image_url = llm.create_ppt_bg(prompt)
+            # possible_backgrounds.append(image_url)
+            pass
 
         for i in range(2):
-            pass
             # image_url = "test.png"
             # variation_url = llm.generate_variations(image_url)
 
             # resp = requests.get(variation_url)
             # image_stream = BytesIO(resp.content)
             # possible_backgrounds.append(image_stream)
+            pass
 
         for slide in ppt.slides:
             number = random.choice([0, 1, 2])

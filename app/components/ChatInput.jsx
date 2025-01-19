@@ -3,12 +3,16 @@ import { useState } from "react";
 export default function PepperoniPrompt() {
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const [script, setScript] = useState("");
 
   const handleImageUpload = (e) => {
     if (e.target.files?.[0]) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0]
+      setImage(file);
+      const fileURL = URL.createObjectURL(file);
+      setImageUrl(fileURL);
     }
   };
 
@@ -22,6 +26,11 @@ export default function PepperoniPrompt() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("image", image);
+    
+
     try {
       const response = await fetch("http://localhost:5000/api/pptx", {
         method: "POST",
@@ -30,7 +39,9 @@ export default function PepperoniPrompt() {
         },
         body: JSON.stringify({ 
           prompt: prompt,
-          script: script
+          script: script,
+          image: formData,
+          imageUrl: imageUrl
         }),
       });
 
@@ -69,7 +80,7 @@ export default function PepperoniPrompt() {
       </div>
 
       {/* Form Card */}
-      <div className="relative w-full max-w-md bg-white/80 backdrop-blur-md shadow-md rounded-lg p-6">
+      <div className="relative w-full max-w-md bg-white/80 backdrop-blur-md shadow-md rounded-lg p-6 max-h-[80vh] overflow-y-auto">
         <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
           Input your pepperoni and we'll make a ppteroni together
         </h1>
@@ -95,6 +106,15 @@ export default function PepperoniPrompt() {
                 hover:file:bg-pink-300"
             />
           </div>
+          {image && (
+              <div className="mt-2 mb-4">
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Pepperoni Preview"
+                  className="w-full rounded-md shadow-md"
+                />
+              </div>
+            )}
 
           <div className="mb-4">
             <label
@@ -137,19 +157,6 @@ export default function PepperoniPrompt() {
             Submit
           </button>
         </form>
-
-        {image && (
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800">
-              Preview:
-            </h3>
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Pepperoni Preview"
-              className="w-full rounded-md shadow-md"
-            />
-          </div>
-        )}
       </div>
 
       {/* Keyframes for floating animation */}
