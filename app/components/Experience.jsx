@@ -79,8 +79,7 @@ export const Experience = () => {
                 fontWeight: "bold",
                 color: "rgb(254 202 202 / var(--tw-bg-opacity, 1))",
                 textAlign: "center",
-                fontFamily: "'Comic Sans MS', cursive, sans-serif",
-                textShadow: "4px 4px 4px rgb(220 38 38 / var(--tw-bg-opacity, 1))",
+                fontFamily: "'Comic Sans MS', cursive, sans-serif"
               }}
             >
               Ppteroni
