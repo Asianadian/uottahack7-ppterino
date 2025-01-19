@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function PepperoniPrompt() {
-  const [prompt, setPrompt] = useState("Hello");
+  const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState(null);
 
   const [script, setScript] = useState("");
