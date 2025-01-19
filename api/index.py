@@ -3,6 +3,7 @@ from flask_cors import CORS
 from llm import LLM
 import os
 from dotenv import load_dotenv
+from pptx import Presentation
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -17,14 +18,23 @@ def pptx():
         data = request.get_json()
         prompt = data['prompt']
 
+        ppt = None
+
         while True:
             try:
                 ppt_code = llm.create_ppt_code_prompt(prompt)
                 exec(ppt_code)
-                res = send_file('./res.pptx')
-                return res
+                
+                ppt = Presentation('./res.pptx') 
+                break
             except:
                 continue
+        
+        #edit ppt slides with background and stuff
+
+        ppt.save("res.pptx")
+        res = send_file('./res.pptx')
+        return res
         
     except Exception as e:
         return {"error": f"Failed to create events: {str(e)}"}
