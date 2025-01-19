@@ -8,16 +8,16 @@ import { Experience } from "./components/Experience";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-row h-screen">
+    <div className="flex flex-row h-screen w-screen">
       {/* Left Section: PepperoniPrompt */}
-      <div className="w-1/2 flex justify-center items-center bg-gray-100 p-8">
+      <div className="w-1/2 flex justify-center items-center bg-gray-100">
         <PepperoniPrompt />
       </div>
 
       {/* Right Section: 3D Canvas */}
       <div className="w-1/2 relative">
         <Canvas shadows camera={{ position: [-5, 8, 5], fov: 10 }}>
-          <color attach="background" args={["#ececec"]} />
+          <color attach="background" args={["#ffffff"]} />
           <Experience />
         </Canvas>
       </div>

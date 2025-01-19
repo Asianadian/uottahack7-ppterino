@@ -64,17 +64,17 @@ export default function PepperoniPrompt() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-8 overflow-hidden bg-gradient-to-br from-pink-100 to-blue-100">
+    <div className="relative min-h-screen w-full flex items-center justify-center px-4 py-8 overflow-hidden bg-gradient-to-br from-pink-100 to-blue-100">
       {/* Floating pizza image */}
       <div
         className="absolute top-20 left-1/2 w-24 h-24"
         style={{ animation: "float 3s ease-in-out infinite" }}
       >
-        <img
+        {/* <img
           src="../pizza.png"
           alt="Floating Pizza"
           className="w-full h-full object-cover"
-        />
+        /> */}
       </div>
 
       {/* Form Card */}
